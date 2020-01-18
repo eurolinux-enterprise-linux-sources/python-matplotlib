@@ -17,7 +17,7 @@
 
 Name:           python-matplotlib
 Version:        1.2.0
-Release:        13%{?dist}
+Release:        15%{?dist}
 Summary:        Python 2D plotting library
 Group:          Development/Libraries
 License:        Python
@@ -321,6 +321,12 @@ popd
 %endif
 
 %changelog
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 1.2.0-15
+- Mass rebuild 2014-01-24
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.2.0-14
+- Mass rebuild 2013-12-27
+
 * Thu Apr 11 2013 Bohuslav Kabrda <bkabrda@redhat.com> - 1.2.0-13
 - Disable building under xvfb-run (#891533).
 
