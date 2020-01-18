@@ -1,0 +1,30 @@
+From 0854a2eaa44b16e2261e9cb7c0f39a2fb82160ab Mon Sep 17 00:00:00 2001
+From: Thomas A Caswell <tcaswell@gmail.com>
+Date: Sat, 9 Jul 2016 14:46:39 -0400
+Subject: [PATCH 4/5] FIX: catch ValueError as well
+
+Closes #6702
+
+Extension of #5233
+
+Signed-off-by: John Kacur <jkacur@redhat.com>
+---
+ lib/matplotlib/font_manager.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/matplotlib/font_manager.py b/lib/matplotlib/font_manager.py
+index 8ee5cdc3fe80..168fa9f306e9 100644
+--- a/lib/matplotlib/font_manager.py
++++ b/lib/matplotlib/font_manager.py
+@@ -581,7 +581,7 @@ def createFontList(fontfiles, fontext='ttf'):
+                 continue
+             try:
+                 prop = ttfFontProperty(font)
+-            except (KeyError, RuntimeError):
++            except (KeyError, RuntimeError, ValueError):
+                 continue
+ 
+         fontlist.append(prop)
+-- 
+2.20.1
+

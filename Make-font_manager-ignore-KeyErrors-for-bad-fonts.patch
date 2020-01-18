@@ -1,0 +1,41 @@
+From faa88c94e36ae1c51ca75c1a8eee87d7148156e3 Mon Sep 17 00:00:00 2001
+From: Damon McDougall <damon.mcdougall@gmail.com>
+Date: Mon, 17 Dec 2012 10:15:48 -0600
+Subject: [PATCH 1/5] Make font_manager ignore KeyErrors for bad fonts
+
+Signed-off-by: John Kacur <jkacur@redhat.com>
+---
+ lib/matplotlib/font_manager.py | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/lib/matplotlib/font_manager.py b/lib/matplotlib/font_manager.py
+index 4ba6f80d0145..f9418dc5b4bd 100644
+--- a/lib/matplotlib/font_manager.py
++++ b/lib/matplotlib/font_manager.py
+@@ -565,7 +565,10 @@ def createFontList(fontfiles, fontext='ttf'):
+             except RuntimeError:
+                 verbose.report("Could not parse font file %s"%fpath)
+                 continue
+-            prop = afmFontProperty(fpath, font)
++            try:
++                prop = afmFontProperty(fpath, font)
++            except KeyError:
++                continue
+         else:
+             try:
+                 font = ft2font.FT2Font(str(fpath))
+@@ -576,7 +579,10 @@ def createFontList(fontfiles, fontext='ttf'):
+                 verbose.report("Cannot handle unicode filenames")
+                 #print >> sys.stderr, 'Bad file is', fpath
+                 continue
+-            prop = ttfFontProperty(font)
++            try:
++                prop = ttfFontProperty(font)
++            except KeyError:
++                continue
+ 
+         fontlist.append(prop)
+     return fontlist
+-- 
+2.20.1
+

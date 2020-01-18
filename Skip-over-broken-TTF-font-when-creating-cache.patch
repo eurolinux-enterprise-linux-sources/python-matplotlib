@@ -1,0 +1,26 @@
+From 484f95e01a836f39ab55daee2663788cb9813c3d Mon Sep 17 00:00:00 2001
+From: Michael Droettboom <mdboom@gmail.com>
+Date: Mon, 12 Oct 2015 18:51:00 -0400
+Subject: [PATCH 2/5] Skip over broken TTF font when creating cache
+
+Signed-off-by: John Kacur <jkacur@redhat.com>
+---
+ lib/matplotlib/font_manager.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/matplotlib/font_manager.py b/lib/matplotlib/font_manager.py
+index f9418dc5b4bd..a57e211509bb 100644
+--- a/lib/matplotlib/font_manager.py
++++ b/lib/matplotlib/font_manager.py
+@@ -581,7 +581,7 @@ def createFontList(fontfiles, fontext='ttf'):
+                 continue
+             try:
+                 prop = ttfFontProperty(font)
+-            except KeyError:
++            except KeyError, RuntimeError:
+                 continue
+ 
+         fontlist.append(prop)
+-- 
+2.20.1
+

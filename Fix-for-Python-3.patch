@@ -1,0 +1,26 @@
+From 49180b3f5bb2e823bfa927a4b46a4ff0ef3730f0 Mon Sep 17 00:00:00 2001
+From: Michael Droettboom <mdboom@gmail.com>
+Date: Mon, 12 Oct 2015 20:03:57 -0400
+Subject: [PATCH 3/5] Fix for Python 3
+
+Signed-off-by: John Kacur <jkacur@redhat.com>
+---
+ lib/matplotlib/font_manager.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/matplotlib/font_manager.py b/lib/matplotlib/font_manager.py
+index a57e211509bb..8ee5cdc3fe80 100644
+--- a/lib/matplotlib/font_manager.py
++++ b/lib/matplotlib/font_manager.py
+@@ -581,7 +581,7 @@ def createFontList(fontfiles, fontext='ttf'):
+                 continue
+             try:
+                 prop = ttfFontProperty(font)
+-            except KeyError, RuntimeError:
++            except (KeyError, RuntimeError):
+                 continue
+ 
+         fontlist.append(prop)
+-- 
+2.20.1
+

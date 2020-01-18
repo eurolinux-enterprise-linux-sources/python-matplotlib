@@ -5,7 +5,7 @@
 %global with_python3            0
 %endif
 %global __provides_exclude_from	.*/site-packages/.*\\.so$
-%global with_html               1
+%global with_html               0
 
 # On RHEL 7 onwards, don't build with wx:
 %if 0%{?rhel} >= 7
@@ -17,7 +17,7 @@
 
 Name:           python-matplotlib
 Version:        1.2.0
-Release:        15%{?dist}
+Release:        16%{?dist}
 Summary:        Python 2D plotting library
 Group:          Development/Libraries
 License:        Python
@@ -63,11 +63,25 @@ Requires:       pygtk2
 Requires:       pyparsing
 Requires:       python-dateutil
 Requires:       pytz
+Requires:	stix-fonts
+Requires:	stix-math-fonts
+
 %if 0%{?fedora} >= 18
 Requires:	stix-math-fonts
 %else
 Requires:	stix-fonts
 %endif
+
+%if 0%{?rhel} >= 7
+Requires:	stix-math-fonts
+%endif
+
+# PATCHES
+Patch4: Make-font_manager-ignore-KeyErrors-for-bad-fonts.patch
+Patch5: Skip-over-broken-TTF-font-when-creating-cache.patch
+Patch6: Fix-for-Python-3.patch
+Patch7: FIX-catch-ValueError-as-well.patch
+Patch8: Remove-call-to-nonexistent-FT2Font.get_fontsize.patch
 
 %description
 Matplotlib is a python 2D plotting library which produces publication
@@ -184,6 +198,11 @@ Requires:       python3-tkinter
 
 %prep
 %setup -q -n matplotlib-%{version}
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
 
 # Remove bundled libraries
 rm -r agg24 lib/matplotlib/pyparsing_py?.py
@@ -321,6 +340,10 @@ popd
 %endif
 
 %changelog
+* Mon Jan 21 2019 John Kacur <jkacur@redhat.com> - 1.2.0-16
+- Fix "unable to parse the pattern" message in stderr
+Resolves: rhbz#1653300
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 1.2.0-15
 - Mass rebuild 2014-01-24
 

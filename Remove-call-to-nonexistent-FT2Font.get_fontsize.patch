@@ -1,0 +1,62 @@
+From 22a27a7921d4c74fada02ed807253b178fcd8e06 Mon Sep 17 00:00:00 2001
+From: Antony Lee <anntzer.lee@gmail.com>
+Date: Thu, 16 Nov 2017 19:57:33 -0800
+Subject: [PATCH 5/5] Remove call to nonexistent FT2Font.get_fontsize.
+
+Signed-off-by: John Kacur <jkacur@redhat.com>
+---
+ lib/matplotlib/font_manager.py | 17 ++++-------------
+ 1 file changed, 4 insertions(+), 13 deletions(-)
+
+diff --git a/lib/matplotlib/font_manager.py b/lib/matplotlib/font_manager.py
+index 168fa9f306e9..2cabc31090bc 100644
+--- a/lib/matplotlib/font_manager.py
++++ b/lib/matplotlib/font_manager.py
+@@ -28,7 +28,6 @@ KNOWN ISSUES
+   - font variant is untested
+   - font stretch is incomplete
+   - font size is incomplete
+-  - font size_adjust is incomplete
+   - default font algorithm needs improvement and testing
+   - setWeights function needs improvement
+   - 'light' is an invalid weight value, remove it.
+@@ -457,14 +456,9 @@ def ttfFontProperty(font):
+     #  Length value is an absolute font size, e.g. 12pt
+     #  Percentage values are in 'em's.  Most robust specification.
+ 
+-    #  !!!!  Incomplete
+-    if font.scalable:
+-        size = 'scalable'
+-    else:
+-        size = str(float(font.get_fontsize()))
+-
+-    #  !!!!  Incomplete
+-    size_adjust = None
++    if not font.scalable:
++        raise NotImplementedError("Non-scalable fonts are not supported")
++    size = 'scalable'
+ 
+     return FontEntry(font.fname, name, style, variant, weight, stretch, size)
+ 
+@@ -530,9 +524,6 @@ def afmFontProperty(fontpath, font):
+ 
+     size = 'scalable'
+ 
+-    # !!!!  Incomplete
+-    size_adjust = None
+-
+     return FontEntry(fontpath, name, style, variant, weight, stretch, size)
+ 
+ 
+@@ -581,7 +572,7 @@ def createFontList(fontfiles, fontext='ttf'):
+                 continue
+             try:
+                 prop = ttfFontProperty(font)
+-            except (KeyError, RuntimeError, ValueError):
++            except (KeyError, RuntimeError, ValueError, NotImplementedError):
+                 continue
+ 
+         fontlist.append(prop)
+-- 
+2.20.1
+
